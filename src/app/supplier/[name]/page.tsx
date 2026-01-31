@@ -40,7 +40,12 @@ const RiskTrend = ({
         <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
         <XAxis dataKey="month" tick={{ fontSize: 12 }} />
         <YAxis tick={{ fontSize: 12 }} domain={[0, 1]} />
-        <Tooltip formatter={(value: number) => formatPercent(value, 1)} />
+        <Tooltip
+          formatter={(value) => {
+            const num = typeof value === "number" ? value : Number(value);
+            return Number.isFinite(num) ? formatPercent(num, 1) : "N/A";
+          }}
+        />
         <Line type="monotone" dataKey={dataKey} stroke="#0f172a" strokeWidth={2} dot />
       </LineChart>
     </ResponsiveContainer>
