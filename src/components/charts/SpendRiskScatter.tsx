@@ -32,9 +32,11 @@ export default function SpendRiskScatter({
           />
           <YAxis type="number" dataKey="risk_score" domain={[0, 100]} tick={{ fontSize: 12 }} />
           <Tooltip
-            formatter={(value: number, name) =>
-              name === "spend" ? `$${value.toLocaleString()}` : value
-            }
+            formatter={(value, name) => {
+              const num = typeof value === "number" ? value : Number(value);
+              if (!Number.isFinite(num)) return "N/A";
+              return name === "spend" ? `$${num.toLocaleString()}` : num;
+            }}
             labelFormatter={(label, payload) =>
               payload?.[0]?.payload?.supplier ? `${payload[0].payload.supplier}` : label
             }
