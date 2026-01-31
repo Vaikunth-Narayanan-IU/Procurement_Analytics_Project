@@ -21,7 +21,12 @@ export default function RiskTrendChart({ data }: { data: { month: string; risk_s
           <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
           <XAxis dataKey="month" tick={{ fontSize: 12 }} />
           <YAxis tick={{ fontSize: 12 }} domain={[0, 100]} />
-          <Tooltip formatter={(value: number) => `${value}`} />
+          <Tooltip
+            formatter={(value) => {
+              const num = typeof value === "number" ? value : Number(value);
+              return Number.isFinite(num) ? `${num}` : "N/A";
+            }}
+          />
           <Line type="monotone" dataKey="risk_score" stroke="#0f172a" strokeWidth={2} dot />
         </LineChart>
       </ResponsiveContainer>
