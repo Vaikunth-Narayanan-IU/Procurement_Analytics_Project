@@ -7,7 +7,7 @@ import { useDataStore } from "@/lib/store";
 import { type ColumnDef } from "@tanstack/react-table";
 
 const tabs = [
-  { key: "missing", label: "Missing delivery dates" },
+  { key: "missingDates", label: "Missing delivery dates" },
   { key: "compliance", label: "Compliance violations" },
   { key: "defects", label: "Defects" },
   { key: "partials", label: "Partial orders" },
@@ -27,7 +27,7 @@ type ExceptionRow = {
 
 export default function ExceptionsPage() {
   const data = useDataStore((state) => state.data);
-  const [activeTab, setActiveTab] = useState<TabKey>("missing");
+  const [activeTab, setActiveTab] = useState<TabKey>("missingDates");
   const [search, setSearch] = useState("");
 
   const exceptions = useMemo(() => computeExceptions(data), [data]);
