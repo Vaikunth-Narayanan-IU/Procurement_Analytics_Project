@@ -8,7 +8,8 @@ export const applyFilters = (data: CanonicalPO[], filters: Filters) => {
     return Number.isNaN(parsed.getTime()) ? null : parsed;
   };
 
-  const isValidDate = (value: Date | null) => value !== null && !Number.isNaN(value.getTime());
+  const isValidDate = (value: Date | null): value is Date =>
+    value !== null && !Number.isNaN(value.getTime());
 
   const from = parseDateSafe(filters.dateFrom);
   const to = parseDateSafe(filters.dateTo);
