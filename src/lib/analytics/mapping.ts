@@ -219,14 +219,16 @@ export const mapRowToCanonical = (
       ...obj,
       supplier,
       source_row: cleanedRow,
-    } satisfies CanonicalPO;
+    } as CanonicalPO;
   }
 
+  const data = parsed.data;
   return {
-    ...parsed.data,
-    supplier,
+    ...data,
+    po_id: data.po_id ?? obj.po_id,
+    supplier: data.supplier ?? supplier,
     source_row: cleanedRow,
-  } satisfies CanonicalPO;
+  } as CanonicalPO;
 };
 
 export const mapRows = (rows: Record<string, string>[], mapping: ColumnMapping) => {
