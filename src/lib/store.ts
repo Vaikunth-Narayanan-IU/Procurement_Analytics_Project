@@ -59,9 +59,23 @@ export const useDataStore = create<DataState>((set, get) => ({
   setRawData: (rows, headers) => set({ rawRows: rows, headers }),
   setMapping: (mapping) => set({ mapping }),
   applyMapping: () => {
-    const { rawRows, mapping } = get();
+    const { rawRows, mapping, filters } = get();
     const data = mapRows(rawRows, mapping);
-    set({ data });
+    const dateCandidates = data
+      .map((row) => row.po_date ?? row.promised_delivery_date ?? row.actual_delivery_date)
+      .filter((date): date is Date => !!date && !Number.isNaN(date.getTime()));
+    let nextFilters = filters;
+    if (dateCandidates.length) {
+      const minTime = Math.min(...dateCandidates.map((date) => date.getTime()));
+      const maxTime = Math.max(...dateCandidates.map((date) => date.getTime()));
+      const format = (value: Date) => value.toISOString().slice(0, 10);
+      nextFilters = {
+        ...filters,
+        dateFrom: filters.dateFrom || format(new Date(minTime)),
+        dateTo: filters.dateTo || format(new Date(maxTime)),
+      };
+    }
+    set({ data, filters: nextFilters });
   },
   setFilter: (key, value) =>
     set((state) => ({
